@@ -56,6 +56,9 @@ RUN set -x \
     && apt-get install -y --no-install-recommends $buildDeps \
     && rm -rf /var/lib/apt/lists/* \
     \
+    && wget -O - https://github.com/prometheus/haproxy_exporter/releases/download/v0.7.1/haproxy_exporter-0.7.1.linux-amd64.tar.gz | tar zxf - \
+    && mv haproxy_exporter-0.7.1.linux-amd64/haproxy_exporter /marathon-lb/haproxy_exporter \
+    && rm -rf haproxy_exporter-0.7.1.linux-amd64 \
 # Build HAProxy
     && wget -O haproxy.tar.gz "https://www.haproxy.org/download/$HAPROXY_MAJOR/src/haproxy-$HAPROXY_VERSION.tar.gz" \
     && echo "$HAPROXY_MD5  haproxy.tar.gz" | md5sum -c \
@@ -93,4 +96,4 @@ WORKDIR /marathon-lb
 ENTRYPOINT [ "tini", "-g", "--", "/marathon-lb/run" ]
 CMD [ "sse", "--health-check", "--group", "external" ]
 
-EXPOSE 80 443 9090 9091
+EXPOSE 80 443 9090 9091 9101

@@ -16,6 +16,10 @@ else
   exit 1
 fi
 
+if [ -n "${PROM_EXPORTER_ENABLED-}" ]; then
+  rm /marathon-lb/service/prometheus_exporter/down
+fi
+
 # Find the --ssl-certs arg if one was provided,
 # get the certs and remove them and the arg from the list
 # of positional parameters so we don't duplicate them
